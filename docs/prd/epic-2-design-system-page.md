@@ -1,6 +1,6 @@
 # Epic 2 — Design System Page
 
-**Goal:** Implementar a rota `/design-system` como um showcase vivo e interativo de todos os componentes shadcn/ui instalados no projeto, servindo como referência visual centralizada que evolui junto com o sistema.
+**Goal:** Implementar a rota `/design-system` como um showcase vivo e interativo de todos os componentes shadcn/ui instalados no projeto, servindo como referência visual centralizada que evolui junto com o sistema. **Este é o segundo e último epic do escopo v1.**
 
 ## Story 2.1 — Design System Page Scaffold
 

@@ -5,12 +5,9 @@
 - **FR1:** O sistema deve ter uma sidebar de navegação colapsável com menus e submenus
 - **FR2:** O sistema deve suportar tema claro e escuro com persistência entre sessões
 - **FR3:** O sistema deve ter uma rota `/design-system` com showcase interativo de todos os componentes UI instalados (tipografia, cores, form elements, overlays)
-- **FR4:** O usuário deve poder criar, visualizar, editar e deletar livros com os campos: título (obrigatório), autor (obrigatório), ano de lançamento (opcional), ano de leitura (opcional), status (não lido / lendo / lido) e imagem de capa (opcional)
-- **FR5:** O usuário deve poder filtrar a lista de livros por status e buscar por título ou autor
-- **FR6:** Cada livro deve ter uma página de detalhe contendo: capa, metadados, seção de sinopse (texto livre editável inline) e seção de notas
-- **FR7:** A seção de notas de cada livro deve ter um editor rich text estilo Notion com suporte a: H1, H2, H3, negrito, itálico, listas (ordenadas e não-ordenadas), bloco de código, citação (blockquote)
-- **FR8:** As notas devem ser salvas pelo usuário via botão "Salvar" explícito; o estado "não salvo" deve ser indicado visualmente (ex: badge "Não salvo" no botão)
-- **FR9:** O usuário deve poder fazer upload de uma imagem de capa para cada livro (JPEG/PNG/WebP, limite 2MB)
+- **FR4:** O sistema deve ter uma rota `/` como Home page real, com entrada dedicada na sidebar, exibindo o título do sistema — implementada dentro do route group `(app)` para herdar o layout com sidebar
+
+> **v1.1 — FR4 a FR9 originais removidos:** Os requisitos do módulo Books (CRUD de livros, filtros, página de detalhe, editor TipTap, upload de capa) foram removidos do escopo v1. Ver `out-of-scope-v1.md`.
 
 ## Non-Functional Requirements
 

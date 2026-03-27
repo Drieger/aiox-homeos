@@ -1,10 +1,10 @@
 # Epic List
 
-| # | Epic | Goal |
-|---|------|------|
-| 1 | Foundation & Infrastructure | Configurar o projeto completo com todo o stack, layout shell e canary page funcional |
-| 2 | Design System Page | Showcase vivo e interativo de todos os componentes UI instalados |
-| 3 | Books: Core CRUD | Módulo de livros completo: listagem, criação, edição, detalhe, upload de capa |
-| 4 | Books: Notes Editor | Editor TipTap com toolbar, save manual com dirty state, persistência como Markdown |
+| # | Epic | Goal | Status |
+|---|------|------|--------|
+| 1 | Foundation & Infrastructure | Configurar o projeto completo com todo o stack, layout shell e Home page real funcional | DONE (com delta stories pendentes) |
+| 2 | Design System Page | Showcase vivo e interativo de todos os componentes UI instalados | PENDING |
+
+> **v1.1 — 2026-03-27:** Epics 3 e 4 (módulo Books) removidos do escopo v1. O módulo de livros é candidato a implementação em v2+. Ver `out-of-scope-v1.md` para detalhes.
 
 ---

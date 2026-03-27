@@ -7,17 +7,12 @@ HomeOS deve ter uma identidade visual de **produtividade pessoal refinada** — 
 ## Key Interaction Paradigms
 
 - Sidebar persistente à esquerda como âncora de navegação (colapsável para modo ícone)
-- Cards para visualização de livros em grid (modo padrão)
-- Dialogs/modais para criação e edição de itens (sem páginas separadas de formulário)
-- Página de detalhe dedicada para leitura/edição de conteúdo longo (sinopse + notas)
-- Editor de notas inline na página de detalhe com toggle read-only / edit mode
+- Home page como tela de entrada do sistema — minimalista, apenas com título e identidade visual
 
 ## Core Screens and Views
 
-1. `/books` — Grid de cards de livros com filtros de status e campo de busca
-2. `/books/[id]` — Detalhe do livro: capa, metadados, sinopse editável inline, editor de notas
-3. `/design-system` — Showcase de componentes UI organizados por categoria
-4. Dialog de criação/edição de livro (overlay sobre qualquer rota)
+1. `/` — Home page: título "HomeOS", dentro do layout com sidebar (route group `(app)`)
+2. `/design-system` — Showcase de componentes UI organizados por categoria
 
 ## Accessibility
 

@@ -4,7 +4,7 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 
 // Mock next/navigation
 vi.mock("next/navigation", () => ({
-  usePathname: () => "/books",
+  usePathname: () => "/",
   Link: ({
     children,
     href,
@@ -31,15 +31,20 @@ describe("AppSidebar", () => {
     mockToggleSidebar.mockClear();
   });
 
-  it("renderiza item 'Biblioteca' e submenu 'Livros'", () => {
+  it("renderiza item 'Home'", () => {
     render(<AppSidebar />);
-    expect(screen.getByText("Biblioteca")).toBeInTheDocument();
-    expect(screen.getByText("Livros")).toBeInTheDocument();
+    expect(screen.getByText("Home")).toBeInTheDocument();
   });
 
   it("renderiza item 'Design System'", () => {
     render(<AppSidebar />);
     expect(screen.getByText("Design System")).toBeInTheDocument();
+  });
+
+  it("não renderiza 'Biblioteca' nem 'Livros'", () => {
+    render(<AppSidebar />);
+    expect(screen.queryByText("Biblioteca")).not.toBeInTheDocument();
+    expect(screen.queryByText("Livros")).not.toBeInTheDocument();
   });
 
   it("botão de toggle chama toggleSidebar no store", () => {
