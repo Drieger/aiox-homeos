@@ -1,0 +1,20 @@
+schema: 1
+story: '1.2'
+gate: PASS
+status_reason: 'Todos os 9 ACs atendidos. Schema correto, singleton seguro com WAL mode, migration auditável, tipos inferidos, testes passando. Concerns menores de baixa prioridade não bloqueiam.'
+reviewer: 'Quinn'
+updated: '2026-03-27T15:30:00Z'
+top_issues:
+  - id: 'TEST-001'
+    severity: medium
+    finding: 'TDD Red phase não verificável via Vitest runtime — expectTypeOf usa type erasure e sempre passa sem os tipos. Red real só manifesta em tsc --noEmit.'
+    suggested_action: 'Para stories futuras com testes de tipo, documentar explicitamente que o Red phase é verificado via tsc, não via vitest --run. Considerar adicionar step de typecheck no CI.'
+  - id: 'MNT-001'
+    severity: low
+    finding: 'created_at e updated_at armazenados como TEXT sem constraint de formato ISO no banco — SQLite aceita qualquer string.'
+    suggested_action: 'Aceitável para MVP. Validação de formato ISO ficará nos schemas Zod (Stories 3.x). Documentar como convenção nos coding-standards se necessário.'
+  - id: 'MNT-002'
+    severity: low
+    finding: 'id é TEXT PRIMARY KEY sem constraint de formato ULID no banco — qualquer string é aceita como ID.'
+    suggested_action: 'Intencional — enforcement do padrão ULID ficará nos commands (Stories 3.x via ulidx). Aceitável para esta story.'
+waiver: { active: false }
