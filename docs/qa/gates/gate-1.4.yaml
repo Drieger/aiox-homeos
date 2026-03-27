@@ -1,0 +1,33 @@
+storyId: "1.4"
+storyTitle: "Global State & Theme"
+date: "2026-03-27"
+reviewer: "Quinn (@qa)"
+verdict: PASS_WITH_CONCERNS
+checks:
+  - id: code-review
+    status: pass
+    note: "Código limpo, JSDoc presente, decisões D1/D2/D3 documentadas"
+  - id: unit-tests
+    status: pass
+    note: "14/14 passando (4 test files), TDD Red→Green confirmado"
+  - id: acceptance-criteria
+    status: pass
+    note: "8/8 ACs implementados"
+  - id: no-regressions
+    status: pass
+    note: "Testes da Story 1.3 continuam passando"
+  - id: performance
+    status: pass
+    note: "disableTransitionOnChange, useState(() => new QueryClient()) SSR-safe"
+  - id: security
+    status: pass
+    note: "Componentes UI puros, sem concerns"
+  - id: documentation
+    status: pass
+    note: "JSDoc completo, Dev Agent Record detalhado"
+issues:
+  - severity: medium
+    category: code
+    description: "useUIStore.theme não sincroniza com next-themes — ThemeToggle usa useTheme().setTheme, campo Zustand fica sempre 'system'"
+    recommendation: "Sincronizar via useEffect + listener do next-themes quando houver consumidor real do campo; registrar como tech debt"
+nextStep: "@devops *push"
