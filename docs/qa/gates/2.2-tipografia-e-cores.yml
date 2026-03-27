@@ -1,0 +1,71 @@
+schema: 1
+story: "2.2"
+story_title: "Tipografia e Cores"
+gate: CONCERNS
+status_reason: "Implementação correcta do AC1 e AC3–AC5. AC2 tem limitação: o grupo 'Light' em ThemeGroup usa a classe CSS '.light' que não existe em globals.css, fazendo com que em dark mode ambos os grupos exibam cores escuras. Cobertura de testes parcial (3/8 exemplos tipográficos)."
+reviewer: "Quinn (Test Architect)"
+updated: "2026-03-27T20:47:00.000Z"
+
+top_issues:
+  - severity: medium
+    category: code
+    description: "ThemeGroup aplica className '.light' ao container do grupo claro, mas globals.css não define seletor .light — apenas :root e .dark. Em dark mode, o grupo 'Light' herda as variáveis CSS escuras do <html> e não as sobrepõe, exibindo cores escuras no lugar das claras."
+    recommendation: "Adicionar .light { /* mesmo conteúdo de :root */ } em globals.css, OU usar atributo data-theme='light' com variável CSS scoped, OU definir as variáveis inline no ThemeGroup para o tema claro."
+    suggested_owner: dev
+    refs:
+      - homeos/src/components/design-system/colors-section.tsx
+      - homeos/src/app/globals.css
+
+  - severity: low
+    category: tests
+    description: "Testes de TypographySection validam apenas 3 dos 8 textos de exemplo (Heading 1, Body text, code snippet). H2, H3, H4, Small text, Muted text não são verificados."
+    recommendation: "Ampliar o teste 'exibe texto de exemplo para cada nível' para cobrir todos os 8 exemplos, ou adicionar iteração sobre o array de níveis."
+    suggested_owner: dev
+    refs:
+      - homeos/tests/component/typography-section.test.tsx
+
+  - severity: low
+    category: tests
+    description: "Nenhum teste verifica que o ColorSwatch (preview colorido) está renderizado no DOM — apenas o nome e a variável são testados. AC3 requer preview colorido."
+    recommendation: "Adicionar verificação de que elementos com role/class de swatch estão presentes, ou verificar o atributo style."
+    suggested_owner: dev
+    refs:
+      - homeos/tests/component/typography-section.test.tsx
+
+waiver:
+  active: false
+
+quality_score: 90
+
+expires: "2026-04-10T20:47:00.000Z"
+
+evidence:
+  tests_reviewed: 5
+  risks_identified: 3
+  trace:
+    ac_covered: [1, 3, 5]
+    ac_gaps: [2, 4]
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: "Componentes display-only, sem input de usuário, sem chamadas API, sem armazenamento de dados. Zero superfície de ataque."
+  performance:
+    status: PASS
+    notes: "TypographySection é Server Component — sem JS client-side. ColorsSection tem mounted guard que evita CLS. Dados estáticos no nível de módulo, sem re-alocações."
+  reliability:
+    status: PASS
+    notes: "Padrão mounted state para SSR safety documentado e correto. Lint disable explicitamente justificado. Build TypeScript sem erros."
+  maintainability:
+    status: CONCERNS
+    notes: "Dados de tokens definidos como arrays no módulo — fácil de atualizar. Porém, a limitação .light/.dark (problema CSS) pode causar confusão futura. ESLint disable comment é tecnicamente correto mas pode mascarar o pattern."
+
+recommendations:
+  immediate:
+    - action: "Corrigir exibição simultânea light/dark: adicionar .light selector em globals.css ou usar variáveis inline"
+      refs: ["homeos/src/app/globals.css", "homeos/src/components/design-system/colors-section.tsx"]
+  future:
+    - action: "Ampliar cobertura de testes: todos os 8 exemplos tipográficos + verificação de ColorSwatch no DOM"
+      refs: ["homeos/tests/component/typography-section.test.tsx"]
+    - action: "Considerar extrair colorTokens para arquivo de constantes compartilhado (quando Stories 2.3/2.4 usarem tokens similares)"
+      refs: ["homeos/src/components/design-system/colors-section.tsx"]
