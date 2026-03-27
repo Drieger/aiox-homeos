@@ -1,3 +1,6 @@
+import { TypographySection } from "@/components/design-system/typography-section";
+import { ColorsSection } from "@/components/design-system/colors-section";
+
 const sections = [
   { id: "tipografia", label: "Tipografia" },
   { id: "cores", label: "Cores" },
@@ -31,16 +34,12 @@ export default function DesignSystemPage() {
       <main className="flex flex-col gap-16 pb-16">
         <section id="tipografia">
           <h2 className="text-2xl font-semibold mb-4">Tipografia</h2>
-          <p className="text-muted-foreground">
-            Showcase de estilos tipográficos — a ser implementado na Story 2.2.
-          </p>
+          <TypographySection />
         </section>
 
         <section id="cores">
           <h2 className="text-2xl font-semibold mb-4">Cores</h2>
-          <p className="text-muted-foreground">
-            Paleta de cores do sistema — a ser implementado na Story 2.2.
-          </p>
+          <ColorsSection />
         </section>
 
         <section id="form-elements">
