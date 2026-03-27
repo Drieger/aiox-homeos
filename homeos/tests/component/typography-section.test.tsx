@@ -14,9 +14,19 @@ describe("TypographySection", () => {
 
   it("exibe texto de exemplo para cada nível", () => {
     render(<TypographySection />);
-    expect(screen.getByText("Heading 1")).toBeInTheDocument();
-    expect(screen.getByText("Body text")).toBeInTheDocument();
-    expect(screen.getByText("code snippet")).toBeInTheDocument();
+    const examples = [
+      "Heading 1",
+      "Heading 2",
+      "Heading 3",
+      "Heading 4",
+      "Body text",
+      "Small text",
+      "Muted text",
+      "code snippet",
+    ];
+    for (const example of examples) {
+      expect(screen.getByText(example)).toBeInTheDocument();
+    }
   });
 });
 
@@ -46,5 +56,19 @@ describe("ColorsSection", () => {
       const els = screen.getAllByText(token);
       expect(els.length).toBeGreaterThanOrEqual(1);
     }
+  });
+
+  it("exibe swatches de preview colorido para cada token", () => {
+    const { container } = render(<ColorsSection />);
+    // Each token appears in both light and dark groups → 20 swatches total (10 tokens × 2 groups)
+    const swatches = container.querySelectorAll("[style*='background-color']");
+    expect(swatches.length).toBe(20);
+  });
+
+  it("exibe tokens em dois grupos simultâneos (light e dark)", () => {
+    render(<ColorsSection />);
+    // --primary deve aparecer 2 vezes: uma no grupo Light, outra no grupo Dark
+    const primaryTokens = screen.getAllByText("--primary");
+    expect(primaryTokens.length).toBe(2);
   });
 });
