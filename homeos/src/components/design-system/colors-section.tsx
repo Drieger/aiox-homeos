@@ -38,7 +38,7 @@ function TokenRow({ label, variable }: { label: string; variable: string }) {
 
 function ThemeGroup({ theme, label }: { theme: "light" | "dark"; label: string }) {
   return (
-    <div className={`flex-1 rounded-lg border border-border p-4 ${theme}`}>
+    <div className={`flex-1 rounded-lg border border-border bg-background p-4 ${theme}`}>
       <p className="mb-3 text-sm font-semibold text-foreground">{label}</p>
       <div className="divide-y divide-border">
         {colorTokens.map((token) => (
