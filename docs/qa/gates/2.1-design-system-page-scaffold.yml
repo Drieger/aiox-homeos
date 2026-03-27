@@ -1,0 +1,49 @@
+schema: 1
+story: '2.1'
+story_title: 'Design System Page Scaffold'
+gate: PASS
+status_reason: 'Todos os 6 ACs implementados corretamente. Uma concern sobre scroll-behavior aplicado no elemento incorreto, sem impacto prático no estágio de scaffold.'
+reviewer: 'Quinn (Test Architect)'
+updated: '2026-03-27T20:30:00Z'
+
+top_issues:
+  - severity: medium
+    category: code
+    description: 'scrollBehavior: smooth aplicado no div raiz da página, mas o scroll container real é o <main overflow-auto> no (app)/layout.tsx. O scroll suave não vai funcionar via CSS quando houver conteúdo longo.'
+    recommendation: 'Adicionar scroll-behavior: smooth ao elemento <main> no (app)/layout.tsx, ou usar CSS global. Corrigir em Story 2.2 quando houver conteúdo real.'
+    suggested_owner: dev
+
+waiver:
+  active: false
+
+quality_score: 90
+
+expires: '2026-04-10T00:00:00Z'
+
+evidence:
+  tests_reviewed: 5
+  risks_identified: 1
+  trace:
+    ac_covered: [1, 2, 3, 4, 5, 6]
+    ac_gaps: []
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: 'Página estática, sem input do usuário, sem dados sensíveis. Nenhuma superfície de ataque.'
+  performance:
+    status: PASS
+    notes: 'Server Component puro, zero JavaScript do lado do cliente. Build estático prerendered.'
+  reliability:
+    status: PASS
+    notes: 'Sem side effects, sem network calls, sem dependências externas.'
+  maintainability:
+    status: PASS
+    notes: 'Array sections como const permite adicionar/remover seções com uma linha. Estrutura clara e extensível para Stories 2.2-2.4.'
+
+recommendations:
+  immediate: []
+  future:
+    - action: 'Mover scroll-behavior: smooth para o elemento <main> em (app)/layout.tsx'
+      refs: ['homeos/src/app/(app)/layout.tsx']
+      when: 'Story 2.2 — antes de adicionar conteúdo real nas seções'
