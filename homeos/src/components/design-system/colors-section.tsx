@@ -29,7 +29,7 @@ function TokenRow({ label, variable }: { label: string; variable: string }) {
     <div className="flex items-center gap-3 py-2">
       <ColorSwatch variable={variable} />
       <div className="flex flex-col gap-0.5">
-        <span className="text-sm font-medium">{label}</span>
+        <span className="text-sm font-medium text-foreground">{label}</span>
         <span className="font-mono text-xs text-muted-foreground">{variable}</span>
       </div>
     </div>
