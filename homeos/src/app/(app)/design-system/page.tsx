@@ -1,5 +1,6 @@
 import { TypographySection } from "@/components/design-system/typography-section";
 import { ColorsSection } from "@/components/design-system/colors-section";
+import { FormElementsSection } from "@/components/design-system/form-elements-section";
 
 const sections = [
   { id: "tipografia", label: "Tipografia" },
@@ -46,9 +47,7 @@ export default function DesignSystemPage() {
           <h2 className="text-2xl font-semibold mb-4">
             Componentes de Formulário
           </h2>
-          <p className="text-muted-foreground">
-            Inputs, selects, checkboxes e demais elementos — a ser implementado na Story 2.3.
-          </p>
+          <FormElementsSection />
         </section>
 
         <section id="overlays">
