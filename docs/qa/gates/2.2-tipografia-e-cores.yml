@@ -54,6 +54,11 @@ resolved_issues:
     resolution: "Adicionado bg-background ao ThemeGroup. Fix por @qa durante re-review. Commit: 62feb2b"
     commit: "62feb2b"
 
+  - severity: high
+    description: "TokenRow label span sem text-foreground — labels 'background', 'foreground', 'card' etc. apareciam em preto (browser default) sobre fundo escuro do grupo Dark"
+    resolution: "Adicionado text-foreground ao span do label em TokenRow. Fix por @qa. Commit: 77d417c"
+    commit: "77d417c"
+
   - severity: low
     description: "Testes cobriam apenas 3/8 exemplos tipográficos e não verificavam ColorSwatch"
     resolution: "Testes expandidos para 26 casos. Fix por @dev."
