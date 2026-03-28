@@ -66,3 +66,23 @@ export async function getDocuments(): Promise<DocumentWithNotebook[]> {
     .orderBy(desc(documents.updatedAt));
   return result;
 }
+
+export async function getDocumentById(id: string) {
+  const result = await db
+    .select()
+    .from(documents)
+    .where(eq(documents.id, id))
+    .limit(1);
+  return result[0] ?? null;
+}
+
+export async function updateDocument(
+  id: string,
+  data: { title?: string; content?: string }
+) {
+  await db
+    .update(documents)
+    .set({ ...data, updatedAt: Date.now() })
+    .where(eq(documents.id, id));
+  revalidatePath("/kb");
+}
