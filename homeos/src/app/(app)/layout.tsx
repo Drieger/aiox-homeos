@@ -1,4 +1,5 @@
 import { AppSidebar, MobileSidebar } from "@/components/layout/app-sidebar";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export default function AppLayout({
   children,
@@ -12,6 +13,9 @@ export default function AppLayout({
         {/* Mobile header — only visible below md breakpoint */}
         <header className="flex md:hidden items-center gap-2 border-b px-4 py-2 shrink-0 bg-background">
           <MobileSidebar />
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </header>
         <main className="flex-1 overflow-auto p-6">{children}</main>
       </div>
