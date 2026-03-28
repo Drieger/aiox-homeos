@@ -1,8 +1,8 @@
 "use server";
 import { db } from "@/lib/db";
-import { notebooks, documents } from "@/lib/db/schema";
+import { notebooks, documents, tags, documentTags } from "@/lib/db/schema";
 import { ulid } from "ulidx";
-import { eq, desc, count } from "drizzle-orm";
+import { eq, desc, count, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -17,6 +17,11 @@ export type DocumentWithNotebook = {
   title: string;
   notebookName: string;
   updatedAt: number;
+};
+
+export type Tag = {
+  id: string;
+  name: string;
 };
 
 export async function createDocument() {
@@ -40,6 +45,21 @@ export async function deleteDocument(id: string) {
   redirect("/kb");
 }
 
+export async function createNotebook(name: string) {
+  const id = ulid();
+  await db.insert(notebooks).values({ id, name });
+  revalidatePath("/kb");
+}
+
+export async function moveDocument(id: string, notebookId: string) {
+  await db
+    .update(documents)
+    .set({ notebookId, updatedAt: Date.now() })
+    .where(eq(documents.id, id));
+  revalidatePath("/kb");
+  revalidatePath(`/kb/${id}`);
+}
+
 export async function getNotebooks(): Promise<NotebookWithCount[]> {
   const result = await db
     .select({
@@ -53,8 +73,40 @@ export async function getNotebooks(): Promise<NotebookWithCount[]> {
   return result;
 }
 
-export async function getDocuments(): Promise<DocumentWithNotebook[]> {
-  const result = await db
+export async function getDocuments(
+  notebookId?: string,
+  tagId?: string
+): Promise<DocumentWithNotebook[]> {
+  if (tagId) {
+    return db
+      .select({
+        id: documents.id,
+        title: documents.title,
+        notebookName: notebooks.name,
+        updatedAt: documents.updatedAt,
+      })
+      .from(documents)
+      .innerJoin(notebooks, eq(notebooks.id, documents.notebookId))
+      .innerJoin(documentTags, eq(documentTags.documentId, documents.id))
+      .where(eq(documentTags.tagId, tagId))
+      .orderBy(desc(documents.updatedAt));
+  }
+
+  if (notebookId) {
+    return db
+      .select({
+        id: documents.id,
+        title: documents.title,
+        notebookName: notebooks.name,
+        updatedAt: documents.updatedAt,
+      })
+      .from(documents)
+      .innerJoin(notebooks, eq(notebooks.id, documents.notebookId))
+      .where(eq(documents.notebookId, notebookId))
+      .orderBy(desc(documents.updatedAt));
+  }
+
+  return db
     .select({
       id: documents.id,
       title: documents.title,
@@ -64,7 +116,6 @@ export async function getDocuments(): Promise<DocumentWithNotebook[]> {
     .from(documents)
     .innerJoin(notebooks, eq(notebooks.id, documents.notebookId))
     .orderBy(desc(documents.updatedAt));
-  return result;
 }
 
 export async function getDocumentById(id: string) {
@@ -85,4 +136,49 @@ export async function updateDocument(
     .set({ ...data, updatedAt: Date.now() })
     .where(eq(documents.id, id));
   revalidatePath("/kb");
+}
+
+export async function getTags(): Promise<Tag[]> {
+  return db.select({ id: tags.id, name: tags.name }).from(tags).orderBy(tags.name);
+}
+
+export async function getDocumentTags(documentId: string): Promise<Tag[]> {
+  return db
+    .select({ id: tags.id, name: tags.name })
+    .from(tags)
+    .innerJoin(documentTags, eq(documentTags.tagId, tags.id))
+    .where(eq(documentTags.documentId, documentId));
+}
+
+export async function addTagToDocument(documentId: string, tagName: string) {
+  let tag = await db
+    .select({ id: tags.id, name: tags.name })
+    .from(tags)
+    .where(eq(tags.name, tagName))
+    .limit(1);
+
+  if (tag.length === 0) {
+    const id = ulid();
+    await db.insert(tags).values({ id, name: tagName });
+    tag = [{ id, name: tagName }];
+  }
+
+  await db
+    .insert(documentTags)
+    .values({ documentId, tagId: tag[0]!.id })
+    .onConflictDoNothing();
+
+  revalidatePath(`/kb/${documentId}`);
+}
+
+export async function removeTagFromDocument(documentId: string, tagId: string) {
+  await db
+    .delete(documentTags)
+    .where(
+      and(
+        eq(documentTags.documentId, documentId),
+        eq(documentTags.tagId, tagId)
+      )
+    );
+  revalidatePath(`/kb/${documentId}`);
 }

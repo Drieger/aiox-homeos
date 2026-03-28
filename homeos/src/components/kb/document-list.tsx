@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import Link from "next/link";
 import { FilePlus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,10 +14,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { createDocument, deleteDocument } from "@/lib/kb/actions";
+import { createDocument, deleteDocument, getDocuments } from "@/lib/kb/actions";
 import type { DocumentWithNotebook } from "@/lib/kb/actions";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useKbStore } from "@/stores/kb-store";
 
 interface DocumentListProps {
   documents: DocumentWithNotebook[];
@@ -31,9 +32,23 @@ function formatDate(timestamp: number): string {
   });
 }
 
-export function DocumentList({ documents }: DocumentListProps) {
+export function DocumentList({ documents: initialDocuments }: DocumentListProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [docs, setDocs] = useState<DocumentWithNotebook[]>(initialDocuments);
+  const [, startFilter] = useTransition();
+
+  const { activeNotebookId, activeTagId } = useKbStore();
+
+  useEffect(() => {
+    startFilter(async () => {
+      const filtered = await getDocuments(
+        activeNotebookId ?? undefined,
+        activeTagId ?? undefined
+      );
+      setDocs(filtered);
+    });
+  }, [activeNotebookId, activeTagId]);
 
   function handleCreate() {
     startTransition(async () => {
@@ -62,7 +77,7 @@ export function DocumentList({ documents }: DocumentListProps) {
           <FilePlus className="size-4" />
         </Button>
       </div>
-      {documents.length === 0 ? (
+      {docs.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 p-6">
           <p className="text-sm text-muted-foreground text-center">
             Nenhum documento. Crie um para começar.
@@ -74,7 +89,7 @@ export function DocumentList({ documents }: DocumentListProps) {
         </div>
       ) : (
         <ul className="flex-1 overflow-y-auto py-1">
-          {documents.map((doc) => (
+          {docs.map((doc) => (
             <li key={doc.id} className="group flex items-center gap-1 px-2">
               <Link
                 href={`/kb/${doc.id}`}

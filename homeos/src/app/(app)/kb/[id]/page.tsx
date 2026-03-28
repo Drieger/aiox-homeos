@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getDocumentById } from "@/lib/kb/actions";
+import { getDocumentById, getNotebooks, getDocumentTags, getTags } from "@/lib/kb/actions";
 import { KbEditor } from "@/components/kb/kb-editor";
 
 export default async function KbDocumentPage({
@@ -9,7 +9,12 @@ export default async function KbDocumentPage({
 }) {
   const { id } = await params;
 
-  const document = await getDocumentById(id);
+  const [document, notebooks, docTags, allTags] = await Promise.all([
+    getDocumentById(id),
+    getNotebooks(),
+    getDocumentTags(id),
+    getTags(),
+  ]);
 
   if (!document) {
     notFound();
@@ -21,6 +26,10 @@ export default async function KbDocumentPage({
         id={document.id}
         initialTitle={document.title}
         initialContent={document.content}
+        initialNotebookId={document.notebookId}
+        notebooks={notebooks}
+        initialTags={docTags}
+        allTags={allTags}
       />
     </div>
   );
