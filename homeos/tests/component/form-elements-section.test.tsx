@@ -3,44 +3,52 @@ import { describe, it, expect } from "vitest";
 import { FormElementsSection } from "@/components/design-system/form-elements-section";
 
 describe("FormElementsSection", () => {
-  it("exibe pelo menos um Button", () => {
+  it("exibe todos os 7 Button variants incluindo disabled", () => {
     render(<FormElementsSection />);
     const buttons = screen.getAllByRole("button");
-    expect(buttons.length).toBeGreaterThanOrEqual(1);
+    // 6 variants + 1 disabled = 7
+    expect(buttons.length).toBe(7);
   });
 
-  it("exibe pelo menos um Input (textbox)", () => {
+  it("exibe Input padrão e Input disabled", () => {
     render(<FormElementsSection />);
-    const inputs = screen.getAllByRole("textbox");
-    expect(inputs.length).toBeGreaterThanOrEqual(1);
+    // 2 inputs (textbox) + 1 textarea (textbox) = 3 textboxes total
+    const textboxes = screen.getAllByRole("textbox");
+    expect(textboxes.length).toBe(3);
   });
 
-  it("exibe pelo menos um Checkbox", () => {
+  it("exibe Textarea com aria-label", () => {
+    render(<FormElementsSection />);
+    expect(screen.getByRole("textbox", { name: /textarea/i })).toBeInTheDocument();
+  });
+
+  it("exibe Select (combobox)", () => {
+    render(<FormElementsSection />);
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
+  });
+
+  it("exibe Checkbox", () => {
     render(<FormElementsSection />);
     const checkboxes = screen.getAllByRole("checkbox");
     expect(checkboxes.length).toBeGreaterThanOrEqual(1);
   });
 
-  it("exibe pelo menos um Switch", () => {
+  it("exibe Switch", () => {
     render(<FormElementsSection />);
     const switches = screen.getAllByRole("switch");
     expect(switches.length).toBeGreaterThanOrEqual(1);
   });
 
-  it("exibe Textarea", () => {
+  it("exibe Input disabled (AC 3)", () => {
     render(<FormElementsSection />);
-    expect(screen.getByRole("textbox", { name: /textarea/i })).toBeInTheDocument();
+    const disabled = screen.getByRole("textbox", { name: /input-disabled/i });
+    expect(disabled).toBeDisabled();
   });
 
-  it("exibe todos os componentes presentes na seção", () => {
+  it("exibe Button disabled (AC 3)", () => {
     render(<FormElementsSection />);
-    // Button
-    expect(screen.getAllByRole("button").length).toBeGreaterThanOrEqual(1);
-    // Input
-    expect(screen.getAllByRole("textbox").length).toBeGreaterThanOrEqual(1);
-    // Checkbox
-    expect(screen.getAllByRole("checkbox").length).toBeGreaterThanOrEqual(1);
-    // Switch
-    expect(screen.getAllByRole("switch").length).toBeGreaterThanOrEqual(1);
+    const buttons = screen.getAllByRole("button");
+    const disabledButtons = buttons.filter((btn) => btn.hasAttribute("disabled"));
+    expect(disabledButtons.length).toBeGreaterThanOrEqual(1);
   });
 });
