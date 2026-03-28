@@ -1,0 +1,73 @@
+schema: 1
+story: '3.4'
+story_title: 'Organization — Cadernos & Tags'
+gate: PASS
+status_reason: 'Todos os 7 ACs implementados e verificados. 85 testes passando (integração DB + componente RTL). Build TypeScript e lint sem erros. 3 concerns de nível MEDIUM documentados como melhorias opcionais para v2.'
+reviewer: 'Quinn (Test Architect)'
+updated: '2026-03-28T17:30:00Z'
+
+top_issues:
+  - severity: medium
+    category: tests
+    description: 'Testes de componente ausentes para KbSidebar (inline input Enter/Esc/blur) e DocumentList (reatividade ao Zustand store)'
+    recommendation: 'Adicionar testes de componente em tests/component/kb/kb-sidebar.test.tsx e document-list.test.tsx em sprint futuro'
+    suggested_owner: dev
+  - severity: medium
+    category: code
+    description: 'createNotebook() não possui guard server-side para nomes vazios/whitespace — depende apenas da UI para validação'
+    recommendation: 'Adicionar trim + early return em actions.ts como defesa em profundidade'
+    suggested_owner: dev
+  - severity: low
+    category: code
+    description: 'Workaround Base UI (render prop em PopoverTrigger) não possui comentário explicativo'
+    recommendation: 'Adicionar comentário inline explicando incompatibilidade de asChild com @base-ui/react'
+    suggested_owner: dev
+
+waiver:
+  active: false
+
+quality_score: 70
+
+expires: '2026-04-11T17:30:00Z'
+
+evidence:
+  tests_reviewed:
+    count: 85
+    files:
+      - tests/integration/kb/organization.test.ts
+      - tests/component/kb/tag-manager.test.tsx
+  risks_identified: 3
+  trace:
+    ac_covered: [1, 2, 3, 4, 5, 6, 7]
+    ac_gaps: []
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: 'Drizzle ORM com queries parametrizadas. React escaping padrão. Server Actions com use server. Ferramenta pessoal sem dados sensitivos.'
+  performance:
+    status: PASS
+    notes: 'Promise.all para data fetching paralelo. Updates otimistas no TagManager. getDocuments via Server Action em cada filtro — aceitável para v1 pessoal.'
+  reliability:
+    status: PASS
+    notes: 'addTagToDocument é idempotente (onConflictDoNothing). moveDocument atualiza updatedAt. removeTagFromDocument usa composite key seguro.'
+  maintainability:
+    status: PASS
+    notes: 'Código auto-documentado. Padrões consistentes. Zustand store minimal e coeso. Separação clara Server Actions / Client Components.'
+
+recommendations:
+  immediate: []
+  future:
+    - action: 'Adicionar testes de componente para KbSidebar e DocumentList'
+      refs:
+        - 'homeos/src/components/kb/kb-sidebar.tsx'
+        - 'homeos/src/components/kb/document-list.tsx'
+    - action: 'Guard server-side em createNotebook para nomes vazios'
+      refs:
+        - 'homeos/src/lib/kb/actions.ts'
+    - action: 'Comentário explicativo no render prop workaround do PopoverTrigger'
+      refs:
+        - 'homeos/src/components/kb/tag-manager.tsx'
+    - action: 'Prevenir cadernos com nomes duplicados (deduplicação) em v2'
+      refs:
+        - 'homeos/src/lib/kb/actions.ts'
