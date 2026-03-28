@@ -1,4 +1,3 @@
-// Schema vazio no escopo v1.
-// Novos módulos adicionam suas tabelas aqui e executam `npm run db:generate`.
-
-export {};
+// Barrel de schemas — re-exporta todos os módulos.
+// Novos módulos adicionam um arquivo em src/lib/db/schema/ e re-exportam aqui.
+export * from "./schema/kb";

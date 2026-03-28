@@ -5,6 +5,7 @@
 | Data | Versão | Descrição | Autor |
 |------|--------|-----------|-------|
 | 2026-03-25 | 1.0 | Criação inicial | Aria (@architect) |
+| 2026-03-28 | 1.1 | ADR-6 (editor KB), ADR-5 generalizado, seção KB Markdown Stack | Aria (@architect) |
 
 ---
 
@@ -54,7 +55,17 @@ HomeOS é uma aplicação **monolith local** — Next.js 15 com App Router rodan
 
 | Tecnologia | Versão | Justificativa |
 |-----------|--------|---------------|
-| **TipTap** | 2+ | Editor Notion-like baseado em ProseMirror. `@tiptap/starter-kit` inclui H1-H3, listas, código, blockquote. `@tiptap/extension-markdown` para serialização/desserialização Markdown. Notas persistidas como Markdown puro (não HTML). |
+| **TipTap** | 2+ | ~~Planejado para módulo Books (removido v1.1 — nunca instalado). Ver ADR-6.~~ |
+| **@uiw/react-md-editor** | latest | Editor Markdown raw para o módulo Knowledge Base (Epic 3). Paradigma raw-MD+preview (não WYSIWYG). Inclui editor CodeMirror + preview integrado. Ver ADR-6. |
+
+### KB Markdown Stack (Epic 3)
+
+| Tecnologia | Versão | Justificativa |
+|-----------|--------|---------------|
+| **react-markdown** | latest | Renderização de Markdown no preview do KB. Suporta plugins remark/rehype customizados (wiki-links). |
+| **remark-gfm** | latest | GitHub Flavored Markdown: tabelas, checkboxes, strikethrough. |
+| **rehype-highlight** | latest | Syntax highlight em code blocks no preview (via lowlight). |
+| **@tailwindcss/typography** | latest | Classes `prose` para tipografia elegante no preview. Integrado via `@plugin "@tailwindcss/typography"` no `globals.css` (sintaxe Tailwind v4). |
 
 ### Identificadores
 
@@ -68,7 +79,7 @@ HomeOS é uma aplicação **monolith local** — Next.js 15 com App Router rodan
 |-----------|--------|---------------|
 | **Vitest** | latest | Compatível com Vite/Next.js. Mais rápido que Jest para ESM. Configurado com `jsdom` environment para component tests. |
 | **@testing-library/react** | latest | Component tests com queries semânticas (por role, label, text) — testa comportamento, não implementação. |
-| **Playwright** | latest | E2E tests para fluxos completos e para TipTap (ProseMirror não funciona em JSDOM — ver seção de estratégia). |
+| **Playwright** | latest | E2E tests para fluxos completos e para editores ricos (ProseMirror/CodeMirror não funcionam em JSDOM — ver ADR-5). |
 
 ---
 
@@ -112,16 +123,24 @@ HomeOS é uma aplicação **monolith local** — Next.js 15 com App Router rodan
 **Razão:** Separa leitura (sem side effects, testável como funções puras) de escrita (com side effects explícitos como filesystem). Sem overhead de classes, interfaces ou DI. Favorece TDD.
 
 ### ADR-3: Markdown para persistência de notas (não HTML)
-**Decisão:** TipTap serializa para Markdown antes de salvar no SQLite.
-**Razão:** Markdown é legível fora do TipTap, portável para outros editors, versionável se necessário. HTML gerado por ProseMirror é verboso e acoplado.
+**Decisão:** Conteúdo de documentos persiste como Markdown puro no SQLite.
+**Razão:** Markdown é legível fora do editor, portável, versionável. HTML gerado por editores ricos é verboso e acoplado à implementação do editor.
 
 ### ADR-4: Covers fora de `public/`
 **Decisão:** `data/covers/` servida via API route `/api/covers/[filename]`.
 **Razão:** Arquivos em `public/` são copiados no build e não funcionam para uploads em runtime no Next.js. API route lê do filesystem e serve com Content-Type correto.
 
-### ADR-5: TipTap testado via Playwright (não JSDOM)
-**Decisão:** Lógica de save testada unitariamente; comportamento do editor testado via E2E.
-**Razão:** ProseMirror usa APIs de DOM (`Selection`, `Range`, `contenteditable`) não implementadas pelo JSDOM. Tentar testar o editor em JSDOM resulta em falsos positivos ou erros de ambiente.
+### ADR-5: Editores ricos testados via Playwright (não JSDOM)
+**Decisão:** Lógica de negócio (save, debounce, Server Actions) testada unitariamente via Vitest; comportamento interativo do editor testado via Playwright E2E.
+**Razão:** ProseMirror (TipTap) e CodeMirror (`@uiw/react-md-editor`) usam APIs de DOM (`Selection`, `Range`, `contenteditable`) não implementadas pelo JSDOM. Testes de editor em JSDOM produzem falsos positivos ou erros de ambiente.
+
+### ADR-6: KB usa `@uiw/react-md-editor` (não TipTap)
+**Decisão:** O módulo Knowledge Base (Epic 3) usa `@uiw/react-md-editor` para edição Markdown raw + preview renderizado.
+**Razão:** TipTap era planejado para o módulo Books (WYSIWYG) que foi removido em v1.1 e nunca instalado. O KB adota paradigma diferente — o usuário escreve Markdown diretamente e alterna para visualização renderizada. `@uiw/react-md-editor` é projetado exatamente para esse caso de uso, sem a complexidade do ProseMirror/TipTap.
+
+### ADR-7: FTS5 com external content table + triggers
+**Decisão:** `documents_fts` é uma FTS5 external content table (`content=documents`). Sincronização mantida via triggers SQL (AFTER INSERT/UPDATE/DELETE em `documents`).
+**Razão:** External content FTS5 evita duplicação de dados no banco. Triggers garantem consistência automática sem lógica na camada de aplicação. A alternativa (rebuild manual do índice) seria frágil e dependente da camada de aplicação para manter a busca atualizada.
 
 ---
 

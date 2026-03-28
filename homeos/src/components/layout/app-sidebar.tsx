@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronLeft, Home, Menu, Palette } from "lucide-react";
+import { BookOpen, ChevronLeft, Home, Menu, Palette } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/ui-store";
 import { SidebarNavItem } from "@/components/layout/sidebar-nav-item";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import {
   Sheet,
   SheetClose,
@@ -19,6 +20,11 @@ const navItems = [
     label: "Home",
     href: "/",
     icon: Home,
+  },
+  {
+    label: "Knowledge Base",
+    href: "/kb",
+    icon: BookOpen,
   },
   {
     label: "Design System",
@@ -76,6 +82,9 @@ export function AppSidebar() {
           />
         ))}
       </nav>
+      <div className="mt-auto border-t px-2 py-3 flex justify-center">
+        <ThemeToggle />
+      </div>
     </aside>
   );
 }

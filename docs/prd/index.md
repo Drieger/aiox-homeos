@@ -40,6 +40,14 @@
     - [Story 2.4 — Showcase: Overlays e Feedback](./epic-2-design-system-page.md#story-24--showcase-overlays-e-feedback)
   - ~~Epic 3 — Books: Core CRUD~~ *(removido em v1.1 — ver git history)*
   - ~~Epic 4 — Books: Notes Editor~~ *(removido em v1.1 — ver git history)*
+  - [Epic 3 — Knowledge Base](./epic-3-knowledge-base.md) *(v1.2 — redefinido)*
+    - [Story 3.1 — KB Foundation: Schema & Migrations](./epic-3-knowledge-base.md#story-31--kb-foundation-schema--migrations)
+    - [Story 3.2 — KB Navigation & Document List](./epic-3-knowledge-base.md#story-32--kb-navigation--document-list)
+    - [Story 3.3 — Document Editor: Markdown + Preview](./epic-3-knowledge-base.md#story-33--document-editor-markdown--preview)
+    - [Story 3.4 — Organization: Cadernos & Tags](./epic-3-knowledge-base.md#story-34--organization-cadernos--tags)
+    - [Story 3.5 — Wiki-Links & Backlinks](./epic-3-knowledge-base.md#story-35--wiki-links--backlinks)
+    - [Story 3.6 — Full-Text Search](./epic-3-knowledge-base.md#story-36--full-text-search)
+    - [Story 3.7 — Export & Polish](./epic-3-knowledge-base.md#story-37--export--polish)
   - [Checklist Results Report](./checklist-results-report.md)
     - [Category Statuses](./checklist-results-report.md#category-statuses)
     - [Decisão Final](./checklist-results-report.md#deciso-final)
