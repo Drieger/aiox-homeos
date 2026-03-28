@@ -1,0 +1,62 @@
+schema: 1
+story: '3.2'
+story_title: 'KB Navigation & Document List'
+gate: PASS
+status_reason: 'Todos os 6 ACs implementados corretamente. Issues encontrados são de baixa severidade (groupBy incompleto para futuros DBs, import duplicado, dead code em scaffold, cobertura de Dialog). Nenhum bloqueante.'
+reviewer: 'Quinn (Test Architect)'
+updated: '2026-03-28T00:00:00.000Z'
+
+top_issues:
+  - severity: low
+    category: code
+    description: 'getNotebooks() usa groupBy(notebooks.id) sem incluir notebooks.name — compatibilidade futura com PostgreSQL'
+    recommendation: 'Adicionar notebooks.name ao groupBy na Story 3.3 ou quando houver migração de DB'
+    suggested_owner: dev
+  - severity: low
+    category: code
+    description: 'Import duplicado de Button e buttonVariants do mesmo arquivo em document-list.tsx'
+    recommendation: 'Unificar em um único import { Button, buttonVariants }'
+    suggested_owner: dev
+  - severity: low
+    category: tests
+    description: 'Sem teste de interação do Dialog de confirmação de exclusão'
+    recommendation: 'Adicionar teste de abertura do Dialog em Story 3.3 ou como tech debt'
+    suggested_owner: dev
+
+waiver: { active: false }
+
+quality_score: 80
+expires: '2026-04-11T00:00:00.000Z'
+
+evidence:
+  tests_reviewed: 10
+  risks_identified: 4
+  trace:
+    ac_covered: [1, 2, 3, 4, 5, 6]
+    ac_gaps: []
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: 'IDs via ULID (não sequenciais), Drizzle ORM (sem SQL injection). Sem autenticação (fora do escopo desta story).'
+  performance:
+    status: PASS
+    notes: 'Promise.all para fetch paralelo. Queries com ORDER BY e LEFT JOIN apropriados.'
+  reliability:
+    status: PASS
+    notes: 'Seed do caderno Geral idempotente. useTransition para feedback de loading.'
+  maintainability:
+    status: PASS
+    notes: 'Código limpo, tipos TypeScript bem definidos, separação Server/Client Components clara.'
+
+recommendations:
+  immediate: []
+  future:
+    - action: 'Adicionar notebooks.name ao groupBy em getNotebooks()'
+      refs: ['homeos/src/lib/kb/actions.ts']
+    - action: 'Unificar imports de Button/buttonVariants'
+      refs: ['homeos/src/components/kb/document-list.tsx']
+    - action: 'Remover dead code if (!id) em /kb/[id]/page.tsx na Story 3.3'
+      refs: ['homeos/src/app/(app)/kb/[id]/page.tsx']
+    - action: 'Adicionar teste de interação do Dialog de confirmação'
+      refs: ['homeos/tests/component/kb/document-list.test.tsx']
