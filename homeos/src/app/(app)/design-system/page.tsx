@@ -1,6 +1,8 @@
 import { TypographySection } from "@/components/design-system/typography-section";
 import { ColorsSection } from "@/components/design-system/colors-section";
 import { FormElementsSection } from "@/components/design-system/form-elements-section";
+import { OverlaysSection } from "@/components/design-system/overlays-section";
+import { FeedbackSection } from "@/components/design-system/feedback-section";
 
 const sections = [
   { id: "tipografia", label: "Tipografia" },
@@ -51,10 +53,10 @@ export default function DesignSystemPage() {
         </section>
 
         <section id="overlays">
-          <h2 className="text-2xl font-semibold mb-4">Overlays</h2>
-          <p className="text-muted-foreground">
-            Modais, sheets, tooltips e popovers — a ser implementado na Story 2.4.
-          </p>
+          <h2 className="text-2xl font-semibold mb-6">Overlays</h2>
+          <OverlaysSection />
+          <h2 className="text-2xl font-semibold mt-12 mb-6">Feedback</h2>
+          <FeedbackSection />
         </section>
       </main>
     </div>
