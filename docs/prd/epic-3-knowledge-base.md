@@ -2,7 +2,7 @@
 
 **Goal:** Implementar o módulo de Knowledge Base do HomeOS — um sistema de notas pessoais com editor Markdown, organização por cadernos e tags, links entre documentos (`[[wiki-links]]`) e busca full-text — 100% offline, sem dependência de serviços externos.
 
-**Status:** Draft
+**Status:** InProgress (Story 3.1 Done)
 
 **Research:** Feature brief produzido pelo @analyst (`docs/research/kb-feature-brief.md`)
 **Plataformas de referência:** Notion, Obsidian, Capacities, Evernote
