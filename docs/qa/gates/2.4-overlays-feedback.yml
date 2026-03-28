@@ -1,0 +1,56 @@
+schema: 1
+story: '2.4'
+story_title: 'Showcase: Overlays e Feedback'
+gate: PASS
+status_reason: >
+  Todos os 5 ACs implementados corretamente. Padrão @base-ui documentado e
+  aplicado consistentemente. FeedbackSection sem cobertura de testes foi
+  corrigida durante review (6 → 9 testes). Zero issues CRITICAL ou HIGH.
+reviewer: 'Quinn (Test Architect)'
+updated: '2026-03-28T04:38:00Z'
+
+top_issues: []
+waiver:
+  active: false
+
+quality_score: 92
+expires: '2026-04-11T04:38:00Z'
+
+evidence:
+  tests_reviewed: 9
+  risks_identified: 0
+  trace:
+    ac_covered: [1, 2, 3, 4, 5]
+    ac_gaps: []
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: 'Showcase puro. Nenhum input processado, nenhuma submissão real. Toast client-side apenas. Sem XSS vectors.'
+  performance:
+    status: PASS
+    notes: 'Dois componentes stateless (overlays) + um com state local mínimo. Nenhum fetch ou effect desnecessário. Toaster no root é padrão esperado.'
+  reliability:
+    status: PASS
+    notes: '43/43 testes passando. Build TypeScript sem erros. Lint sem erros. Gotcha @base-ui (asChild) identificado e documentado.'
+  maintainability:
+    status: PASS
+    notes: >
+      SubSection helper duplicado em overlays-section.tsx e feedback-section.tsx
+      (LOW — extração justificável no futuro se padrão crescer). Padrão
+      buttonVariants+className documenta a API @base-ui de forma explícita.
+
+recommendations:
+  immediate: []
+  future:
+    - action: >
+        Extrair SubSection para componente compartilhado em design-system/
+        se um terceiro showcase precisar dele (DRY após 3 usos)
+      refs:
+        - 'homeos/src/components/design-system/overlays-section.tsx'
+        - 'homeos/src/components/design-system/feedback-section.tsx'
+    - action: >
+        Adicionar gotcha @base-ui (sem asChild, usar className+buttonVariants
+        ou render prop) às Dev Notes do projeto para stories futuras
+      refs:
+        - 'docs/stories/2.4.story.md'
