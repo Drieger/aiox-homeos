@@ -322,6 +322,27 @@ sections:
         owner: scrum-master
         editors: [scrum-master]
         
+  - id: design-system-impact
+    title: Design System Impact
+    type: metadata
+    required: false
+    instruction: |
+      **OBRIGATÓRIO para stories com impacto visual** (componentes, layout, estilos, tokens).
+      Deixe em branco apenas se a story não tocar em nenhum elemento de UI.
+
+      **Regra:** Se `new_components` ou `new_tokens` não estiver vazio → definir `ux_approval_required: true`
+      e preencher `ux_approval_evidence` ANTES de iniciar implementação.
+
+      Referência completa: `.claude/rules/design-system-governance.md`
+    template: |
+      uses_existing_components_only: true
+      new_components: []
+      new_tokens: []
+      ux_approval_required: false
+      ux_approval_evidence: ""
+    owner: scrum-master
+    editors: [scrum-master, dev-agent]
+
   - id: change-log
     title: Change Log
     type: table
